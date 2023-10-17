@@ -1,10 +1,11 @@
-package resp
+package response
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
+// 成功响应
 func success(c *app.RequestContext, data any, total int, isArray ...bool) {
 	response(c, consts.StatusOK, CodeSuccess, nil, "", data, total, isArray)
 }

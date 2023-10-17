@@ -1,9 +1,11 @@
+// Package conf 系统相关配置
 package conf
 
 import (
 	"github.com/bytedance/go-tagexpr/v2/validator"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"gopkg.in/yaml.v3"
+	"hertz/demo/internal/utils"
 	"os"
 	"sync"
 )
@@ -46,7 +48,7 @@ type Hertz struct {
 
 // GetConf gets configuration instance
 func GetConf() *Config {
-	once.Do(initConf)
+	once.Do(initConf) // 只读取一次
 	return conf
 }
 func initConf() {
@@ -67,8 +69,10 @@ func initConf() {
 		panic(err)
 	}
 
-	hlog.Info("conf init ok: ", conf)
+	hlog.Info("conf init ok: ", utils.StructToString(conf))
 }
+
+// LogLevel 日志打印级别
 func LogLevel() hlog.Level {
 	level := GetConf().Hertz.LogLevel
 	switch level {

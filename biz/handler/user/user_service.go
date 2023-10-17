@@ -4,72 +4,60 @@ package user
 
 import (
 	"context"
+	"hertz/demo/internal/response"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	user "hertz/demo/biz/model/hertz/user"
+	"hertz/demo/biz/model/hertz/user"
 )
 
 // CreateUserResponse .
 // @router /v1/user/create [POST]
 func CreateUserResponse(ctx context.Context, c *app.RequestContext) {
-	var err error
 	var req user.CreateUserReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, "err: "+err.Error())
+	if err := c.BindAndValidate(&req); err != nil {
+		response.ErrorRequest(c, err)
 		return
 	}
 
 	resp := new(user.CreateUserResp)
-
-	c.JSON(consts.StatusOK, resp)
+	response.SuccessWithData(c, resp)
 }
 
 // QueryUserResponse .
 // @router /v1/user/query [POST]
 func QueryUserResponse(ctx context.Context, c *app.RequestContext) {
-	var err error
 	var req user.QueryUserReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+	if err := c.BindAndValidate(&req); err != nil {
+		response.ErrorRequest(c, err)
 		return
 	}
 
 	resp := new(user.QueryUserResp)
-
-	c.JSON(consts.StatusOK, resp)
+	response.SuccessWithData(c, resp)
 }
 
 // UpdateUserResponse .
 // @router /v1/user/update/:user_id [POST]
 func UpdateUserResponse(ctx context.Context, c *app.RequestContext) {
-	var err error
 	var req user.UpdateUserReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+	if err := c.BindAndValidate(&req); err != nil {
+		response.ErrorRequest(c, err)
 		return
 	}
 
 	resp := new(user.UpdateUserResp)
-
-	c.JSON(consts.StatusOK, resp)
+	response.SuccessWithData(c, resp)
 }
 
 // DeleteUserResponse .
 // @router /v1/user/delete/:user_id [POST]
 func DeleteUserResponse(ctx context.Context, c *app.RequestContext) {
-	var err error
 	var req user.DeleteUserReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+	if err := c.BindAndValidate(&req); err != nil {
+		response.ErrorRequest(c, err)
 		return
 	}
 
 	resp := new(user.DeleteUserResp)
-
-	c.JSON(consts.StatusOK, resp)
+	response.SuccessWithData(c, resp)
 }

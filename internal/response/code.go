@@ -1,5 +1,6 @@
-package resp
+package response
 
+// 业务相关状态码
 const (
 	CodeSuccess = 200 // 成功
 	CodeAccept  = 202

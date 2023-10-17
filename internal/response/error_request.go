@@ -1,4 +1,5 @@
-package resp
+// Package resp: 请求错误相关响应
+package response
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
