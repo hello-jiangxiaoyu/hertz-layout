@@ -1,0 +1,16 @@
+info:
+  contact: {}
+paths:
+  /v1/user/create:
+    post:
+      responses: {}
+  /v1/user/delete/:user_id:
+    post:
+      responses: {}
+  /v1/user/query:
+    post:
+      responses: {}
+  /v1/user/update/:user_id:
+    post:
+      responses: {}
+swagger: "2.0"
