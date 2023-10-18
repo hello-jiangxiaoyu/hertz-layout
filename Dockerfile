@@ -10,7 +10,7 @@ ADD go.sum .
 RUN go mod download
 COPY . .
 
-RUN  go build -ldflags="-s -w" -o server .
+RUN  go build -o server .
 
 
 ##
@@ -23,5 +23,5 @@ WORKDIR /app
 COPY --from=builder /app/server ./
 COPY --from=builder /app/internal/conf/conf.online.yaml ./internal/conf/conf.online.yaml
 
-EXPOSE 8080
+EXPOSE 8888
 ENTRYPOINT ./server
