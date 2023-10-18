@@ -4,6 +4,8 @@ services:
     image: 'mysql:latest'
     ports:
       - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=gorm
       - MYSQL_USER=gorm
