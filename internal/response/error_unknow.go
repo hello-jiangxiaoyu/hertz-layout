@@ -19,3 +19,7 @@ func ErrorNotFound(c *app.RequestContext, err error, respMsg string, isArray ...
 func ErrorSaveSession(c *app.RequestContext, err error, isArray ...bool) {
 	errorResponse(c, consts.StatusInternalServerError, CodeSaveSession, err, "failed to save session", isArray)
 }
+
+func ErrorPanic(c *app.RequestContext) {
+	errorResponse(c, consts.StatusInternalServerError, CodeServerPanic, nil, "server panic", nil)
+}

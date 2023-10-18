@@ -25,3 +25,11 @@ func StructToString(obj any) string {
 	}
 	return string(res)
 }
+
+// DefaultValIfEmpty 为空就返回默认值
+func DefaultValIfEmpty(val, def string) string {
+	if val == "" {
+		return def
+	}
+	return val
+}

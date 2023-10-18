@@ -3,17 +3,10 @@
 package main
 
 import (
-	"context"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	"github.com/hertz-contrib/gzip"
-	"hertz/demo/biz/handler"
-
 	"github.com/hertz-contrib/swagger"
 	swaggerFiles "github.com/swaggo/files"
+	"hertz/demo/biz/handler"
 	_ "hertz/demo/internal/docs"
 )
 
@@ -23,12 +16,4 @@ func customizedRegister(r *server.Hertz) {
 
 	// your code ...
 	r.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler))
-	r.Use(gzip.Gzip(gzip.DefaultCompression)) //响应压缩
-	r.Use(recovery.Recovery(recovery.WithRecoveryHandler(MyRecoveryHandler)))
-}
-
-// MyRecoveryHandler panic处理
-func MyRecoveryHandler(c context.Context, ctx *app.RequestContext, err interface{}, stack []byte) {
-	hlog.SystemLogger().CtxErrorf(c, "[Recovery] err=%v\nstack=%s", err, stack)
-	ctx.AbortWithStatus(consts.StatusInternalServerError)
 }

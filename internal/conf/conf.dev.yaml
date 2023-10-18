@@ -8,6 +8,7 @@ hertz:
   log_max_size: 10
   log_max_age: 3
   log_max_backups: 50
+  log_full_stack: false # 是否打印完整panic堆栈信息
 
 mysql:
   dsn: "gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8&parseTime=True&loc=Local"
