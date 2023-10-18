@@ -6,6 +6,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"hertz/demo/biz/dal"
+	"hertz/demo/internal/conf"
 	"os"
 	"time"
 )
@@ -31,7 +32,7 @@ func main() {
 		return
 	}
 
-	h := server.Default()
+	h := server.Default(server.WithHostPorts(conf.GetConf().Hertz.Address))
 	register(h)
 	h.Spin()
 }

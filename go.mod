@@ -6,6 +6,7 @@ require (
 	github.com/bytedance/go-tagexpr/v2 v2.9.11
 	github.com/bytedance/sonic v1.10.2
 	github.com/cloudwego/hertz v0.7.1
+	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/swagger v0.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.2.1
