@@ -5,6 +5,10 @@ package main
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 	handler "hertz/demo/biz/handler"
+
+	"github.com/hertz-contrib/swagger"
+	swaggerFiles "github.com/swaggo/files"
+	_ "hertz/demo/internal/docs"
 )
 
 // customizeRegister registers customize routers.
@@ -12,4 +16,5 @@ func customizedRegister(r *server.Hertz) {
 	r.GET("/ping", handler.Ping)
 
 	// your code ...
+	r.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler))
 }

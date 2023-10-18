@@ -1,5 +1,12 @@
+basePath: /
+host: localhost:8888
 info:
   contact: {}
+  description: This is a demo using Hertz.
+  license:
+    name: Apache 2.0
+  title: HertzTest
+  version: "1.0"
 paths:
   /v1/user/create:
     post:
@@ -13,4 +20,6 @@ paths:
   /v1/user/update/:user_id:
     post:
       responses: {}
+schemes:
+- http
 swagger: "2.0"

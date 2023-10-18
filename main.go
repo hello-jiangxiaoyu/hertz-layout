@@ -10,6 +10,13 @@ import (
 	"time"
 )
 
+// @title HertzTest
+// @version 1.0
+// @description		This is a demo using Hertz.
+// @license.name	Apache 2.0
+// @host			localhost:8888
+// @BasePath /
+// @schemes http
 func main() {
 	var err error
 	for i := 0; i < 3; i++ {
