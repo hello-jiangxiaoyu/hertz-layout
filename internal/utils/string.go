@@ -33,3 +33,10 @@ func DefaultValIfEmpty(val, def string) string {
 	}
 	return val
 }
+
+func ToUpperCase(c byte) byte {
+	if 'a' <= c && c <= 'z' {
+		return c - 'a' + 'A'
+	}
+	return c
+}
