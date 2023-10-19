@@ -8,59 +8,78 @@ import (
 	"hertz/demo/internal/response"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"hertz/demo/biz/model/hertz/user"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	user "hertz/demo/biz/model/hertz/user"
 )
 
 var a internal.Api
 
-// CreateUserResponse .
-// @router /v1/user/create [POST]
-func CreateUserResponse(ctx context.Context, c *app.RequestContext) {
+// GetUser .
+// @Description	get user list
+// @Tags		user
+// @Success		200
+// @router		/v1/im/admin/user [GET]
+func GetUser(_ context.Context, c *app.RequestContext) {
+	var req user.NULL
+	if err := a.SetReqWithSub(c, &req).Error; err != nil {
+		response.ErrorRequest(c, err)
+		return
+	}
+
+	resp := new(user.CommonResp)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// CreateUser .
+// @Description	create user
+// @Tags		user
+// @Success		200
+// @router		/v1/im/admin/user [POST]
+func CreateUser(_ context.Context, c *app.RequestContext) {
 	var req user.CreateUserReq
-	if err := a.SetReq(c, &req).Error; err != nil {
+	if err := a.SetReqWithSub(c, &req).Error; err != nil {
 		response.ErrorRequest(c, err)
 		return
 	}
 
-	resp := new(user.CreateUserResp)
-	response.SuccessWithData(c, resp)
+	resp := new(user.CommonResp)
+
+	c.JSON(consts.StatusOK, resp)
 }
 
-// QueryUserResponse .
-// @router /v1/user/query [POST]
-func QueryUserResponse(ctx context.Context, c *app.RequestContext) {
-	var req user.QueryUserReq
-	if err := c.BindAndValidate(&req); err != nil {
+// DisableUser .
+// @Description	disable user
+// @Tags		user
+// @Param		userID		path	integer	true	"user id"
+// @Success		200
+// @router		/v1/im/admin/user/:userID/disable [PUT]
+func DisableUser(_ context.Context, c *app.RequestContext) {
+	var req user.UserReq
+	if err := a.SetReqWithSub(c, &req).Error; err != nil {
 		response.ErrorRequest(c, err)
 		return
 	}
 
-	resp := new(user.QueryUserResp)
-	response.SuccessWithData(c, resp)
+	resp := new(user.CommonResp)
+
+	c.JSON(consts.StatusOK, resp)
 }
 
-// UpdateUserResponse .
-// @router /v1/user/update/:user_id [POST]
-func UpdateUserResponse(ctx context.Context, c *app.RequestContext) {
-	var req user.UpdateUserReq
-	if err := c.BindAndValidate(&req); err != nil {
+// DeleteUser .
+// @Description	delete user
+// @Tags		user
+// @Param		userID		path	integer	true	"user id"
+// @Success		200
+// @router		/v1/im/admin/user/:userID [DELETE]
+func DeleteUser(_ context.Context, c *app.RequestContext) {
+	var req user.UserReq
+	if err := a.SetReqWithSub(c, &req).Error; err != nil {
 		response.ErrorRequest(c, err)
 		return
 	}
 
-	resp := new(user.UpdateUserResp)
-	response.SuccessWithData(c, resp)
-}
+	resp := new(user.CommonResp)
 
-// DeleteUserResponse .
-// @router /v1/user/delete/:user_id [POST]
-func DeleteUserResponse(ctx context.Context, c *app.RequestContext) {
-	var req user.DeleteUserReq
-	if err := c.BindAndValidate(&req); err != nil {
-		response.ErrorRequest(c, err)
-		return
-	}
-
-	resp := new(user.DeleteUserResp)
-	response.SuccessWithData(c, resp)
+	c.JSON(consts.StatusOK, resp)
 }

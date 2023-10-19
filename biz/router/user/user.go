@@ -20,16 +20,17 @@ func Register(r *server.Hertz) {
 	{
 		_v1 := root.Group("/v1", _v1Mw()...)
 		{
-			_user := _v1.Group("/user", _userMw()...)
-			_user.POST("/create", append(_createuserresponseMw(), user.CreateUserResponse)...)
-			_user.POST("/query", append(_queryuserresponseMw(), user.QueryUserResponse)...)
+			_im := _v1.Group("/im", _imMw()...)
 			{
-				_delete := _user.Group("/delete", _deleteMw()...)
-				_delete.POST("/:user_id", append(_deleteuserresponseMw(), user.DeleteUserResponse)...)
-			}
-			{
-				_update := _user.Group("/update", _updateMw()...)
-				_update.POST("/:user_id", append(_updateuserresponseMw(), user.UpdateUserResponse)...)
+				_admin := _im.Group("/admin", _adminMw()...)
+				_admin.GET("/user", append(_getuserMw(), user.GetUser)...)
+				_user := _admin.Group("/user", _userMw()...)
+				_user.DELETE("/:userID", append(_deleteuserMw(), user.DeleteUser)...)
+				{
+					_userid := _user.Group("/:userID", _useridMw()...)
+					_userid.PUT("/disable", append(_disableuserMw(), user.DisableUser)...)
+				}
+				_admin.POST("/user", append(_createuserMw(), user.CreateUser)...)
 			}
 		}
 	}

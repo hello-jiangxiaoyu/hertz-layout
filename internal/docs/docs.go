@@ -18,24 +18,72 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/user/create": {
+        "/v1/im/admin/user": {
+            "get": {
+                "description": "get user list",
+                "tags": [
+                    "user"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
             "post": {
-                "responses": {}
+                "description": "create user",
+                "tags": [
+                    "user"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
-        "/v1/user/delete/:user_id": {
-            "post": {
-                "responses": {}
+        "/v1/im/admin/user/:userID": {
+            "delete": {
+                "description": "delete user",
+                "tags": [
+                    "user"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
-        "/v1/user/query": {
-            "post": {
-                "responses": {}
-            }
-        },
-        "/v1/user/update/:user_id": {
-            "post": {
-                "responses": {}
+        "/v1/im/admin/user/:userID/disable": {
+            "put": {
+                "description": "disable user",
+                "tags": [
+                    "user"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         }
     }

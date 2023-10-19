@@ -6,89 +6,35 @@ package user;
 option go_package = "hertz/user";
 
 import "api.proto";
+import "google/protobuf/any.proto";
 
-enum Code {
-  Success = 0;
-  ParamInvalid = 1;
-  DBErr = 2;
-}
-
-enum Gender {
-  Unknown = 0;
-  Male = 1;
-  Female = 2;
-}
-
-message User{
-  int64 user_id = 1;
-  string name = 2;
-  Gender gender = 3;
-  int64  age = 4;
-  string introduce = 5;
-}
-
-message CreateUserReq{
-  string name = 1 [(api.body) = "name", (api.form) = "name", (api.vd) = "(len($) > 0 && len($) < 100)"];
-  Gender gender = 2 [(api.body) = "gender", (api.form) = "gender", (api.vd) = "($ == 1||$ == 2)"];
-  int64 age = 3 [(api.body) = "age", (api.form) = "age", (api.vd) = "$>0"];
-  string introduce = 4 [(api.body) = "introduce", (api.form) = "introduce", (api.vd) = "(len($) > 0 && len($) < 1000)"];
-}
-
-message CreateUserResp{
-  Code code = 1;
+message CommonResp{
+  int64  code = 1;
   string msg = 2;
+  google.protobuf.Any data = 3;
 }
 
-message QueryUserReq{
-  string keyword = 1 [(api.body) = "keyword", (api.form) = "keyword"];
-  int64 page = 2 [(api.body) = "page", (api.form) = "page", (api.vd) = "$>0"];
-  int64 page_size = 3 [(api.body) = "page_size", (api.form) = "page_size", (api.vd) = "($ > 0 || $ <= 100)"];
+message NULL{}
+message UserReq{
+  int64 userID = 1 [(api.path) = "userID", (api.vd) = "$>0"];
 }
 
-message QueryUserResp{
-  Code code = 1;
-  string msg = 2;
-  repeated User user = 3;
-  int64 total = 4;
-}
-
-message DeleteUserReq{
-  int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
-}
-
-message DeleteUserResp{
-  Code code = 1;
-  string msg = 2;
-}
-
-message UpdateUserReq{
-  int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
-  string name = 2 [(api.body) = "name", (api.form) = "name", (api.vd) = "(len($) > 0 && len($) < 100)"];
-  Gender gender = 3 [(api.body) = "gender", (api.form) = "gender", (api.vd) = "($ == 1||$ == 2)"];
-  int64 age = 4 [(api.body) = "age", (api.form) = "age", (api.vd) = "$>0"];
-  string introduce = 5 [(api.body) = "introduce", (api.form) = "introduce", (api.vd) = "(len($) > 0 && len($) < 1000)"];
-}
-
-message UpdateUserResp{
-  Code code = 1;
-  string msg = 2;
-}
-
-message OtherResp {
-  string msg = 1;
+message CreateUserReq {
+  string  username = 1 [(api.form) = "username", (api.vd) = "(len($) > 2 && len($) < 100)"];
+  string  password = 2 [(api.form) = "username", (api.vd) = "(len($) > 6 && len($) < 100)"];
 }
 
 service UserService {
-  rpc CreateUserResponse(CreateUserReq) returns(CreateUserResp) {
-    option (api.post) = "/v1/user/create";
+  rpc GetUser(NULL) returns(CommonResp) {
+    option (api.get) = "/v1/im/admin/user"; // 获取用户列表
   }
-  rpc QueryUserResponse(QueryUserReq) returns(QueryUserResp){
-    option (api.post) = "/v1/user/query";
+  rpc CreateUser(CreateUserReq) returns(CommonResp) {
+    option (api.post) = "/v1/im/admin/user"; // 创建用户
   }
-  rpc UpdateUserResponse(UpdateUserReq) returns(UpdateUserResp){
-    option (api.post) = "/v1/user/update/:user_id";
+  rpc DisableUser(UserReq) returns(CommonResp) {
+    option (api.put) = "/v1/im/admin/user/:userID/disable"; // 禁用用户
   }
-  rpc DeleteUserResponse(DeleteUserReq) returns(DeleteUserResp){
-    option (api.post) = "/v1/user/delete/:user_id";
+  rpc DeleteUser(UserReq) returns(CommonResp) { // 删除用户
+    option (api.delete) = "/v1/im/admin/user/:userID";
   }
 }

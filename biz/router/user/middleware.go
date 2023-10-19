@@ -50,3 +50,38 @@ func _updateuserresponseMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _imMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _adminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getuserMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deleteuserMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _useridMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _disableuserMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createuserMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
