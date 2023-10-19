@@ -4,17 +4,20 @@ package user
 
 import (
 	"context"
+	"hertz/demo/biz/handler/internal"
 	"hertz/demo/internal/response"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"hertz/demo/biz/model/hertz/user"
 )
 
+var a internal.Api
+
 // CreateUserResponse .
 // @router /v1/user/create [POST]
 func CreateUserResponse(ctx context.Context, c *app.RequestContext) {
 	var req user.CreateUserReq
-	if err := c.BindAndValidate(&req); err != nil {
+	if err := a.SetReq(c, &req).Error; err != nil {
 		response.ErrorRequest(c, err)
 		return
 	}
