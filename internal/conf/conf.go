@@ -2,7 +2,6 @@
 package conf
 
 import (
-	"github.com/bytedance/go-tagexpr/v2/validator"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"gopkg.in/yaml.v3"
 	"hertz/demo/internal/utils"
@@ -63,10 +62,6 @@ func initConf() {
 	conf = new(Config)
 	if err = yaml.Unmarshal(content, conf); err != nil {
 		hlog.Error("parse yaml error - %v", err)
-		panic(err)
-	}
-	if err = validator.Validate(conf); err != nil {
-		hlog.Error("validate config error - %v", err)
 		panic(err)
 	}
 
