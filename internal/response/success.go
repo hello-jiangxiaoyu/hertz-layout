@@ -16,8 +16,12 @@ func Success(c *app.RequestContext, isArray ...bool) {
 func SuccessWithData(c *app.RequestContext, data any) {
 	success(c, data, 0, false)
 }
-func SuccessArrayData(c *app.RequestContext, total int, data any) {
+
+func SuccessArrayDataWithTotal(c *app.RequestContext, total int, data any) {
 	success(c, data, total, true)
+}
+func SuccessArrayData(c *app.RequestContext, data any) {
+	success(c, data, 0, true)
 }
 
 func DoNothing(c *app.RequestContext, msg string, isArray ...bool) {

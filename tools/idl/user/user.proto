@@ -8,10 +8,14 @@ option go_package = "hertz/user";
 import "api.proto";
 import "google/protobuf/any.proto";
 
-message CommonResp{
+message CommonResp {
   int64  code = 1;
   string msg = 2;
   google.protobuf.Any data = 3;
+}
+message CommonGetReq {
+  int64 cursor = 1;
+  int64 num = 2;
 }
 
 message NULL{}
@@ -25,7 +29,7 @@ message CreateUserReq {
 }
 
 service UserService {
-  rpc GetUser(NULL) returns(CommonResp) {
+  rpc GetUser(CommonGetReq) returns(CommonResp) {
     option (api.get) = "/v1/im/admin/user"; // 获取用户列表
   }
   rpc CreateUser(CreateUserReq) returns(CommonResp) {

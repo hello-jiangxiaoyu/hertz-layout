@@ -13,6 +13,7 @@ require (
 	github.com/redis/go-redis/v9 v9.2.1
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/swag v1.16.2
+	golang.org/x/crypto v0.14.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.5.2
@@ -43,7 +44,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0 // indirect
 	github.com/nyaruka/phonenumbers v1.1.8 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect

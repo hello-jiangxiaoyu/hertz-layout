@@ -7,11 +7,11 @@ import (
 )
 
 var (
-	DB  *gorm.DB
-	err error
+	DB *gorm.DB
 )
 
 func Init() error {
+	var err error
 	DB, err = gorm.Open(mysql.Open(conf.GetConf().MySQL.DSN),
 		&gorm.Config{
 			PrepareStmt:            true,

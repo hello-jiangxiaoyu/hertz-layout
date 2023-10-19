@@ -4,11 +4,11 @@ package user
 
 import (
 	"context"
+	"hertz/demo/biz/dal/mysql"
 	"hertz/demo/biz/handler/internal"
 	"hertz/demo/internal/response"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	user "hertz/demo/biz/model/hertz/user"
 )
 
@@ -20,15 +20,18 @@ var a internal.Api
 // @Success		200
 // @router		/v1/im/admin/user [GET]
 func GetUser(_ context.Context, c *app.RequestContext) {
-	var req user.NULL
+	var req user.CommonGetReq
 	if err := a.SetReqWithSub(c, &req).Error; err != nil {
 		response.ErrorRequest(c, err)
 		return
 	}
 
-	resp := new(user.CommonResp)
-
-	c.JSON(consts.StatusOK, resp)
+	list, err := mysql.GetUserList(req.Cursor, req.Num)
+	if err != nil {
+		response.ErrorSelect(c, err, "get user list err")
+		return
+	}
+	response.SuccessArrayData(c, list)
 }
 
 // CreateUser .
@@ -43,9 +46,12 @@ func CreateUser(_ context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(user.CommonResp)
+	if err := mysql.CreateUser(req.Username, req.Password); err != nil {
+		response.ErrorCreate(c, err, "create user err")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	response.Success(c)
 }
 
 // DisableUser .
@@ -60,10 +66,11 @@ func DisableUser(_ context.Context, c *app.RequestContext) {
 		response.ErrorRequest(c, err)
 		return
 	}
-
-	resp := new(user.CommonResp)
-
-	c.JSON(consts.StatusOK, resp)
+	if err := mysql.DisableUser(req.UserID); err != nil {
+		response.ErrorUpdate(c, err, "disable user err")
+		return
+	}
+	response.Success(c)
 }
 
 // DeleteUser .
@@ -78,8 +85,9 @@ func DeleteUser(_ context.Context, c *app.RequestContext) {
 		response.ErrorRequest(c, err)
 		return
 	}
-
-	resp := new(user.CommonResp)
-
-	c.JSON(consts.StatusOK, resp)
+	if err := mysql.DeleteUser(req.UserID); err != nil {
+		response.ErrorDelete(c, err, "delete user err")
+		return
+	}
+	response.Success(c)
 }
