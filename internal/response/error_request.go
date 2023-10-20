@@ -1,4 +1,5 @@
-// Package resp: 请求错误相关响应
+// 请求错误相关响应
+
 package response
 
 import (
@@ -31,6 +32,6 @@ func ErrorInvalidateToken(c *app.RequestContext, isArray ...bool) {
 }
 
 // ErrorNoLogin 用户未登录
-func ErrorNoLogin(c *app.RequestContext, err error, isArray ...bool) {
-	errorResponse(c, consts.StatusUnauthorized, CodeNotLogin, err, "user not login", isArray)
+func ErrorNoLogin(c *app.RequestContext, isArray ...bool) {
+	errorResponse(c, consts.StatusUnauthorized, CodeNotLogin, nil, "user not login", isArray)
 }

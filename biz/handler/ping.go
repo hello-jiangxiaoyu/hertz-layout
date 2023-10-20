@@ -11,8 +11,7 @@ import (
 )
 
 // Ping .
-func Ping(ctx context.Context, c *app.RequestContext) {
-	panic("hello")
+func Ping(_ context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, utils.H{
 		"message": "pong",
 	})

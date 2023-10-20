@@ -1,4 +1,5 @@
-// Package resp 未知错误响应
+// 未知错误响应
+
 package response
 
 import (

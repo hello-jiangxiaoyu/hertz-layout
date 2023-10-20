@@ -5,6 +5,7 @@
 package mysql
 
 import (
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -12,19 +13,20 @@ const TableNameUser = "users"
 
 // User mapped from table <users>
 type User struct {
-	ID          string     `gorm:"column:id;type:char(32);primaryKey" json:"id"`
-	Username    string     `gorm:"column:username;type:varchar(127);not null" json:"username"`
-	Password    string     `gorm:"column:password;type:varchar(127);not null" json:"password"`
-	NickName    string     `gorm:"column:nick_name;type:varchar(127);not null" json:"nickName"`
-	DisplayName string     `gorm:"column:display_name;type:varchar(127);not null" json:"displayName"`
-	Gender      string     `gorm:"column:gender;type:char(1);not null;default:0" json:"gender"`
-	Birthdate   *time.Time `gorm:"column:birthdate;type:date" json:"birthdate"`
-	Addr        string     `gorm:"column:addr;type:varchar(255);not null" json:"addr"`
-	Avatar      string     `gorm:"column:avatar;type:varchar(255);not null" json:"avatar"`
-	Type        int32      `gorm:"column:type;type:int;not null" json:"type"`
-	IsDisabled  bool       `gorm:"column:is_disabled;type:tinyint(1);not null" json:"isDisabled"`
-	CreatedAt   time.Time  `gorm:"column:created_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"createdAt"`
-	UpdatedAt   time.Time  `gorm:"column:updated_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"updatedAt"`
+	ID          string         `gorm:"column:id;type:char(32);primaryKey" json:"id"`
+	Username    string         `gorm:"column:username;type:varchar(127);not null" json:"username"`
+	Password    string         `gorm:"column:password;type:varchar(127);not null" json:"password"`
+	NickName    string         `gorm:"column:nick_name;type:varchar(127);not null" json:"nickName"`
+	DisplayName string         `gorm:"column:display_name;type:varchar(127);not null" json:"displayName"`
+	Gender      string         `gorm:"column:gender;type:char(1);not null;default:0" json:"gender"`
+	Birthdate   *time.Time     `gorm:"column:birthdate;type:date" json:"birthdate"`
+	Addr        string         `gorm:"column:addr;type:varchar(255);not null" json:"addr"`
+	Avatar      string         `gorm:"column:avatar;type:varchar(255);not null" json:"avatar"`
+	Type        int32          `gorm:"column:type;type:int;not null" json:"type"`
+	IsDisabled  bool           `gorm:"column:is_disabled;type:tinyint(1);not null" json:"isDisabled"`
+	CreatedAt   time.Time      `gorm:"column:created_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"createdAt"`
+	UpdatedAt   time.Time      `gorm:"column:updated_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"updatedAt"`
+	DeletedAt   gorm.DeletedAt `gorm:"column:deleted_at;type:timestamp" json:"deleted_at"`
 }
 
 // TableName User's table name

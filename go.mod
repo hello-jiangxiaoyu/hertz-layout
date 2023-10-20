@@ -5,6 +5,8 @@ go 1.20
 require (
 	github.com/bytedance/sonic v1.10.2
 	github.com/cloudwego/hertz v0.7.1
+	github.com/go-jose/go-jose/v3 v3.0.0
+	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/swagger v0.1.0
 	github.com/pkg/errors v0.9.1

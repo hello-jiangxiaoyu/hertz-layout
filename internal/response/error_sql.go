@@ -1,4 +1,5 @@
-// Package resp: sql操作错误相关响应
+// sql操作错误相关响应
+
 package response
 
 import (
