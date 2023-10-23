@@ -3,6 +3,7 @@ package conf
 import "os"
 
 const (
+	DefaultCookieKey  = "hertz-layout"
 	DefaultConfigPath = "internal/conf/conf.online.yaml"
 )
 

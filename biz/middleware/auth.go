@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/golang-jwt/jwt/v5"
+	"hertz/demo/internal/conf"
 	"hertz/demo/internal/response"
 	"hertz/demo/internal/utils"
 	"strconv"
@@ -11,7 +12,7 @@ import (
 
 // AuthHandler cookie鉴权
 func AuthHandler(_ context.Context, c *app.RequestContext) {
-	idToken := c.Cookie("hertz-layout")
+	idToken := c.Cookie(conf.DefaultCookieKey)
 	if len(idToken) == 0 {
 		response.ErrorNoLogin(c)
 		return

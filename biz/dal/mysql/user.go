@@ -49,3 +49,11 @@ func DisableUser(userID int64) error {
 	}
 	return nil
 }
+
+func GetUserByName(username string) (mysql.User, error) {
+	var user mysql.User
+	if err := DB.Where("username = ?", username).First(&user).Error; err != nil {
+		return user, err
+	}
+	return user, nil
+}

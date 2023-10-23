@@ -4,12 +4,22 @@ package oauth
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/golang-jwt/jwt/v5"
+	"hertz/demo/biz/dal/mysql"
 	"hertz/demo/biz/handler/internal"
 	"hertz/demo/biz/model/hertz/oauth"
+	"hertz/demo/internal/conf"
 	"hertz/demo/internal/response"
+	"hertz/demo/internal/utils"
+	"strconv"
+	"time"
+)
 
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
+const (
+	ExpireSecond = 3600 * 24 * 7
 )
 
 var a internal.Api
@@ -23,14 +33,35 @@ var a internal.Api
 // @router		/v1/hertz/auth2/login [POST]
 func LoginPassword(_ context.Context, c *app.RequestContext) {
 	var req oauth.LoginReq
-	if err := a.SetReqWithSub(c, &req).Error; err != nil {
+	if err := a.SetReq(c, &req).Error; err != nil {
 		response.ErrorRequest(c, err)
 		return
 	}
+	user, err := mysql.GetUserByName(req.Username)
+	if err != nil {
+		response.ErrorRequest(c, err)
+		return
+	}
+	if !utils.CheckPasswordHash(req.Password, user.Password) {
+		response.ErrorForbidden(c, "password err")
+		return
+	}
 
-	resp := new(oauth.CommonResp)
+	now := time.Now()
+	tokenString, err := utils.SigneTokenString(jwt.RegisteredClaims{
+		Issuer:    "hertz-layout",                                          // token签发者
+		Subject:   strconv.FormatInt(user.ID, 10),                          // 用户id
+		ExpiresAt: jwt.NewNumericDate(now.Add(ExpireSecond * time.Second)), // 过期时间
+		NotBefore: jwt.NewNumericDate(now.Add(time.Second * -10)),          // 生效时间
+	})
+	if err != nil {
+		response.ErrorUnknown(c, err, "signe token string err")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.SetCookie(conf.DefaultCookieKey, tokenString, ExpireSecond, "/", string(c.Host()), protocol.CookieSameSiteNoneMode, false, true)
+
+	response.Success(c)
 }
 
 // LoginProvider .
