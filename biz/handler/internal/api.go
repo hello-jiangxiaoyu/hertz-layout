@@ -45,6 +45,7 @@ func (a Api) SetReqWithSub(c *app.RequestContext, obj ...any) Api {
 	if !ok {
 		return a.setError(ErrorSubIsNil)
 	}
+
 	int64Sub := new(int64)
 	*int64Sub, ok = sub.(int64)
 	if !ok {

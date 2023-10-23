@@ -26,3 +26,7 @@ func Init() error {
 func Info() *zerolog.Event {
 	return Zero.Info().Str("ts", time.Now().Format("2006-01-02T15:04:05.000"))
 }
+
+func Warn() *zerolog.Event {
+	return Zero.Warn().Str("ts", time.Now().Format("2006-01-02T15:04:05.000"))
+}

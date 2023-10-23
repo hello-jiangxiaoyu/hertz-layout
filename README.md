@@ -7,7 +7,8 @@ hz new -module hertz-layout -I idl -idl idl
 
 更新接口
 ```bash
-hz update -I idl -idl tools/idl/user/user.proto
+hz update -I idl -idl tools/idl/user.proto
+hz update -I idl -idl tools/idl/oauth.proto
 ```
 
 生成文档

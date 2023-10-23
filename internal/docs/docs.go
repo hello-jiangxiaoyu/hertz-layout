@@ -18,7 +18,20 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/im/admin/user": {
+        "/v1/hertz/.well-known/jwks.json": {
+            "get": {
+                "description": "获取jwk公钥",
+                "tags": [
+                    "oidc"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/hertz/admin/user": {
             "get": {
                 "description": "get user list",
                 "tags": [
@@ -42,7 +55,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/im/admin/user/:userID": {
+        "/v1/hertz/admin/user/{userID}": {
             "delete": {
                 "description": "delete user",
                 "tags": [
@@ -64,7 +77,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/im/admin/user/:userID/disable": {
+        "/v1/hertz/admin/user/{userID}/disable": {
             "put": {
                 "description": "disable user",
                 "tags": [
@@ -83,6 +96,159 @@ const docTemplate = `{
                     "200": {
                         "description": "OK"
                     }
+                }
+            }
+        },
+        "/v1/hertz/auth2/login": {
+            "post": {
+                "description": "账号密码登录",
+                "tags": [
+                    "login"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "账号",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/hertz/auth2/login/{type}": {
+            "post": {
+                "description": "第三方登录",
+                "tags": [
+                    "login"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "第三方登录类型",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/hertz/auth2/logout": {
+            "post": {
+                "description": "登出",
+                "tags": [
+                    "login"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/hertz/auth2/token": {
+            "post": {
+                "description": "获取access token",
+                "tags": [
+                    "oidc"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "oauth2 client_id",
+                        "name": "client_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "oauth2 client_secret",
+                        "name": "client_secret",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/hertz/me/profile": {
+            "get": {
+                "description": "获取个人信息",
+                "tags": [
+                    "login"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "description": "修改个人信息",
+                "tags": [
+                    "login"
+                ],
+                "parameters": [
+                    {
+                        "description": "个人信息请求体",
+                        "name": "bd",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/oauth.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "oauth.User": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "display_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "is_disabled": {
+                    "type": "boolean"
+                },
+                "is_online": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "integer"
                 }
             }
         }

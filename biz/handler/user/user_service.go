@@ -59,7 +59,7 @@ func CreateUser(_ context.Context, c *app.RequestContext) {
 // @Tags		user
 // @Param		userID		path	integer	true	"user id"
 // @Success		200
-// @router		/v1/hertz/admin/user/:userID/disable [PUT]
+// @router		/v1/hertz/admin/user/{userID}/disable [PUT]
 func DisableUser(_ context.Context, c *app.RequestContext) {
 	var req user.UserReq
 	if err := a.SetReqWithSub(c, &req).Error; err != nil {
@@ -78,7 +78,7 @@ func DisableUser(_ context.Context, c *app.RequestContext) {
 // @Tags		user
 // @Param		userID		path	integer	true	"user id"
 // @Success		200
-// @router		/v1/hertz/admin/user/:userID [DELETE]
+// @router		/v1/hertz/admin/user/{userID} [DELETE]
 func DeleteUser(_ context.Context, c *app.RequestContext) {
 	var req user.UserReq
 	if err := a.SetReqWithSub(c, &req).Error; err != nil {

@@ -4,11 +4,11 @@ package user
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"hertz/demo/biz/middleware"
 )
 
 func rootMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{middleware.AuthHandler}
 }
 
 func _v1Mw() []app.HandlerFunc {
@@ -16,47 +16,17 @@ func _v1Mw() []app.HandlerFunc {
 	return nil
 }
 
-func _userMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _createuserresponseMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _queryuserresponseMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _deleteMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _deleteuserresponseMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _updateMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _updateuserresponseMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _imMw() []app.HandlerFunc {
+func _hertzMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
 
 func _adminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _userMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
@@ -82,11 +52,6 @@ func _disableuserMw() []app.HandlerFunc {
 }
 
 func _createuserMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _hertzMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

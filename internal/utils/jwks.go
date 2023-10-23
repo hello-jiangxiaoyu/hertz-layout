@@ -7,12 +7,14 @@ import (
 	"encoding/pem"
 	"github.com/go-jose/go-jose/v3"
 	"github.com/golang-jwt/jwt/v5"
+	"hertz/demo/biz/dal/log"
 	"os"
 )
 
-var (
-	kid  = "0"
-	path = "data/jwk.key"
+const (
+	DefaultDir  = "data"
+	DefaultKid  = "hertz-layout"
+	DefaultPath = DefaultDir + "/" + DefaultKid + ".key"
 )
 
 // SigneTokenString 签名token
@@ -27,7 +29,7 @@ func SigneTokenString(claims jwt.Claims) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-	token.Header["kid"] = kid
+	token.Header["kid"] = DefaultKid
 	tokenString, err := token.SignedString(key)
 	if err != nil {
 		return "", err
@@ -36,24 +38,30 @@ func SigneTokenString(claims jwt.Claims) (string, error) {
 }
 
 // GetJWKPublic 获取jwk公钥
-func GetJWKPublic() (*jose.JSONWebKey, error) {
+func GetJWKPublic() (*jose.JSONWebKeySet, error) {
 	pemString, err := getJWK()
 	if err != nil {
-		return nil, err
+		log.Warn().Msg("start generate JWK: " + err.Error())
+		if pemString, err = GenerateKey(); err != nil {
+			return nil, err
+		}
 	}
 	key, err := jwt.ParseRSAPrivateKeyFromPEM(pemString)
 	if err != nil {
 		return nil, err
 	}
 
-	return &jose.JSONWebKey{
+	jwk := jose.JSONWebKey{
 		Key:                       key.Public(),
-		KeyID:                     kid,
+		KeyID:                     DefaultKid,
 		Algorithm:                 "RS256",
 		Use:                       "sig",
 		Certificates:              []*x509.Certificate{},
 		CertificateThumbprintSHA1: []uint8{},
-	}, nil
+	}
+	var jwkSet jose.JSONWebKeySet
+	jwkSet.Keys = append(jwkSet.Keys, jwk) // 只生成一个jwk
+	return &jwkSet, nil
 }
 
 // GetJWKPrivate 获取私钥
@@ -89,7 +97,7 @@ func GenerateKey() ([]byte, error) {
 
 // getJWK 获取jwk
 func getJWK() ([]byte, error) {
-	pemString, err := os.ReadFile(path)
+	pemString, err := os.ReadFile(DefaultPath)
 	if err != nil {
 		return nil, err
 	}
@@ -99,18 +107,14 @@ func getJWK() ([]byte, error) {
 
 // setJWK 保存jwk私钥
 func setJWK(payload []byte) error {
-	if _, err := os.ReadDir(path); err != nil {
-		if err = os.MkdirAll(path, 0700); err != nil {
+	if _, err := os.ReadDir(DefaultDir); err != nil {
+		if err = os.MkdirAll(DefaultDir, 0700); err != nil {
 			return err
 		}
 	}
 
-	var err error
-	if len(payload) == 0 {
-		err = os.Remove(path)
-	} else {
-		err = os.WriteFile(path, payload, 0400)
+	if err := os.WriteFile(DefaultPath, payload, 0400); err != nil {
+		return err
 	}
-
-	return err
+	return nil
 }

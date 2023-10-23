@@ -6,6 +6,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"hertz/demo/internal/response"
 	"hertz/demo/internal/utils"
+	"strconv"
 )
 
 // AuthHandler cookie鉴权
@@ -25,7 +26,6 @@ func AuthHandler(_ context.Context, c *app.RequestContext) {
 	token, err := jwt.ParseWithClaims(string(idToken), claim.Claims, func(token *jwt.Token) (interface{}, error) {
 		return key.Public(), nil
 	})
-
 	if err != nil {
 		response.ErrorUnknown(c, err, "parse claim err")
 		return
@@ -34,10 +34,17 @@ func AuthHandler(_ context.Context, c *app.RequestContext) {
 		response.ErrorForbidden(c, "invalid token")
 		return
 	}
+
+	// set user sub
 	sub, err := claim.Claims.GetSubject()
 	if err != nil {
 		response.ErrorUnknown(c, err, "get sub err")
 		return
 	}
-	c.Set("sub", sub)
+	intSub, err := strconv.ParseInt(sub, 10, 64)
+	if err != nil {
+		response.ErrorUnknown(c, err, "sub to integer err")
+		return
+	}
+	c.Set("sub", intSub)
 }

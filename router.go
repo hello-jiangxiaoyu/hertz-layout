@@ -15,5 +15,5 @@ func customizedRegister(r *server.Hertz) {
 	r.GET("/ping", handler.Ping)
 
 	// your code ...
-	r.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/v1/hertz/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler))
 }

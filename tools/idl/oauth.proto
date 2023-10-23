@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package oauth;
+
+// biz/model
+option go_package = "hertz/oauth";
+
+import "api.proto";
+import "google/protobuf/any.proto";
+
+message NoReq {}
+message CommonResp{
+  int64  code = 1;
+  string msg  = 2;
+  google.protobuf.Any data = 3;
+}
+
+
+// 登录
+message LoginReq {
+  string  username = 1 [(api.form) = "username", (api.vd) = "(len($) > 2 && len($) < 100)"];
+  string  password = 2 [(api.form) = "username", (api.vd) = "(len($) > 6 && len($) < 100)"];
+}
+message TypeReq {
+  string type = 1 [(api.path) = "type", (api.vd) = "(len($) > 2 && len($) < 100)"];
+}
+message User {
+  string display_name = 1;
+  string gender = 2;
+  string avatar = 3;
+  int32  type = 4;
+  bool   is_online = 5;
+  bool   is_disabled = 6;
+}
+
+service Login {
+  rpc LoginPassword(LoginReq) returns(CommonResp) {
+    option (api.post) = "/v1/im/auth2/login"; // 账号密码登录
+  }
+  rpc LoginProvider(TypeReq) returns(CommonResp) {
+    option (api.post) = "/v1/im/auth2/login/:type"; // 第三方登录
+  }
+  rpc GetProfile(NoReq) returns(CommonResp) {
+    option (api.get) = "/v1/im/me/profile"; // 个人信息
+  }
+  rpc UpdateProfile(User) returns(CommonResp) {
+    option (api.put) = "/v1/im/me/profile"; // 修改个人信息
+  }
+  rpc Logout(NoReq) returns(CommonResp) {
+    option (api.post) = "/v1/im/auth2/logout"; // 登出
+  }
+}
+
+
+// 授权
+message TokenReq {
+  string clientID     = 1 [(api.query) = "client_id", (api.vd) = "len($) < 100"];
+  string clientSecret = 2 [(api.query) = "client_secret", (api.vd) = "len($) < 100"];
+  string grantType    = 3 [(api.query) = "grant_type", (api.vd) = "len($) < 100"];
+}
+message JWKSKey {
+  string use = 1 [(api.body) = "use"];
+  string kty = 2 [(api.body) = "kty"];
+  string kid = 3 [(api.body) = "kid"];
+  string alg = 4 [(api.body) = "alg"];
+  string n   = 5 [(api.body) = "e"];
+  string e   = 6 [(api.body) = "n"];
+}
+message JWKSResp {
+  repeated JWKSKey keys = 1;
+}
+
+service OAuth {
+  rpc GetToken(TokenReq) returns(CommonResp) {
+    option (api.post) = "/v1/hertz/auth2/token"; // 获取token
+  }
+  rpc GetJWKs(NoReq) returns(JWKSResp) {
+    option (api.get) = "/v1/hertz/.well-known/jwks.json"; // 获取jwks
+  }
+}
+

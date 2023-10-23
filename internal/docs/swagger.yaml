@@ -1,4 +1,20 @@
 basePath: /
+definitions:
+  oauth.User:
+    properties:
+      avatar:
+        type: string
+      display_name:
+        type: string
+      gender:
+        type: string
+      is_disabled:
+        type: boolean
+      is_online:
+        type: boolean
+      type:
+        type: integer
+    type: object
 host: localhost:8888
 info:
   contact: {}
@@ -8,7 +24,15 @@ info:
   title: HertzTest
   version: "1.0"
 paths:
-  /v1/im/admin/user:
+  /v1/hertz/.well-known/jwks.json:
+    get:
+      description: 获取jwk公钥
+      responses:
+        "200":
+          description: OK
+      tags:
+      - oidc
+  /v1/hertz/admin/user:
     get:
       description: get user list
       responses:
@@ -23,7 +47,7 @@ paths:
           description: OK
       tags:
       - user
-  /v1/im/admin/user/:userID:
+  /v1/hertz/admin/user/{userID}:
     delete:
       description: delete user
       parameters:
@@ -37,7 +61,7 @@ paths:
           description: OK
       tags:
       - user
-  /v1/im/admin/user/:userID/disable:
+  /v1/hertz/admin/user/{userID}/disable:
     put:
       description: disable user
       parameters:
@@ -51,6 +75,88 @@ paths:
           description: OK
       tags:
       - user
+  /v1/hertz/auth2/login:
+    post:
+      description: 账号密码登录
+      parameters:
+      - description: 账号
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - login
+  /v1/hertz/auth2/login/{type}:
+    post:
+      description: 第三方登录
+      parameters:
+      - description: 第三方登录类型
+        in: path
+        name: type
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - login
+  /v1/hertz/auth2/logout:
+    post:
+      description: 登出
+      responses:
+        "200":
+          description: OK
+      tags:
+      - login
+  /v1/hertz/auth2/token:
+    post:
+      description: 获取access token
+      parameters:
+      - description: oauth2 client_id
+        in: query
+        name: client_id
+        required: true
+        type: string
+      - description: oauth2 client_secret
+        in: query
+        name: client_secret
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - oidc
+  /v1/hertz/me/profile:
+    get:
+      description: 获取个人信息
+      responses:
+        "200":
+          description: OK
+      tags:
+      - login
+    put:
+      description: 修改个人信息
+      parameters:
+      - description: 个人信息请求体
+        in: body
+        name: bd
+        required: true
+        schema:
+          $ref: '#/definitions/oauth.User'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - login
 schemes:
 - http
 swagger: "2.0"
