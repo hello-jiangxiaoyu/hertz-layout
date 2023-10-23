@@ -12,6 +12,7 @@ func AccessLog(ctx context.Context, c *app.RequestContext) {
 	start := time.Now()
 	c.Next(ctx)
 	log.Access.Info().
+		Str("ts", time.Now().Format("2006-01-02T15:04:05.000")).
 		Int("status", c.Response.StatusCode()).
 		Str("method", string(c.Method())).
 		Str("path", string(c.Path())).
@@ -24,5 +25,5 @@ func AccessLog(ctx context.Context, c *app.RequestContext) {
 		Str("proto", string(c.Request.URI().Scheme())).
 		Str("ref", c.Request.Header.Get(consts.HeaderReferer)).
 		Str("ua", c.Request.Header.Get(consts.HeaderUserAgent)).
-		Msg(c.Errors.String())
+		Str("err", c.Errors.String()).Msg("")
 }
