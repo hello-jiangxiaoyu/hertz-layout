@@ -20,9 +20,9 @@ func Register(r *server.Hertz) {
 	{
 		_v1 := root.Group("/v1", _v1Mw()...)
 		{
-			_im := _v1.Group("/im", _imMw()...)
+			_hertz := _v1.Group("/hertz", _hertzMw()...)
 			{
-				_admin := _im.Group("/admin", _adminMw()...)
+				_admin := _hertz.Group("/admin", _adminMw()...)
 				_admin.GET("/user", append(_getuserMw(), user.GetUser)...)
 				_user := _admin.Group("/user", _userMw()...)
 				_user.DELETE("/:userID", append(_deleteuserMw(), user.DeleteUser)...)

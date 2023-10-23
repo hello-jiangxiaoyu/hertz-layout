@@ -10,7 +10,9 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/gzip"
+	"github.com/hertz-contrib/logger/accesslog"
 	"hertz/demo/biz/dal"
+	"hertz/demo/biz/dal/log"
 	"hertz/demo/biz/middleware"
 	"hertz/demo/internal/conf"
 	"os"
@@ -38,6 +40,14 @@ func main() {
 		return
 	}
 
+	log.Zero.Info().Msg("zero log")
+	log.Access.Info().Msg("access log")
+
+	hz := getServer()
+	hz.Spin()
+}
+
+func getServer() *server.Hertz {
 	opts := []config.Option{
 		server.WithHostPorts(conf.GetConf().Hertz.Address),                 // 监听端口
 		server.WithTracer(middleware.PrometheusHandler(":9091", "/hertz")), // 请求量和时延等监控
@@ -45,9 +55,10 @@ func main() {
 	h := server.New(opts...)
 	h.Use(middleware.MyRecoveryHandler)       // panic处理
 	h.Use(gzip.Gzip(gzip.DefaultCompression)) //响应压缩
+	h.Use(accesslog.New())
 	h.NoRoute(func(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, "no such router")
 	})
 	register(h)
-	h.Spin()
+	return h
 }

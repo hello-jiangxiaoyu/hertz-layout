@@ -18,7 +18,7 @@ var a internal.Api
 // @Description	get user list
 // @Tags		user
 // @Success		200
-// @router		/v1/im/admin/user [GET]
+// @router		/v1/hertz/admin/user [GET]
 func GetUser(_ context.Context, c *app.RequestContext) {
 	var req user.CommonGetReq
 	if err := a.SetReqWithSub(c, &req).Error; err != nil {
@@ -38,7 +38,7 @@ func GetUser(_ context.Context, c *app.RequestContext) {
 // @Description	create user
 // @Tags		user
 // @Success		200
-// @router		/v1/im/admin/user [POST]
+// @router		/v1/hertz/admin/user [POST]
 func CreateUser(_ context.Context, c *app.RequestContext) {
 	var req user.CreateUserReq
 	if err := a.SetReqWithSub(c, &req).Error; err != nil {
@@ -59,7 +59,7 @@ func CreateUser(_ context.Context, c *app.RequestContext) {
 // @Tags		user
 // @Param		userID		path	integer	true	"user id"
 // @Success		200
-// @router		/v1/im/admin/user/:userID/disable [PUT]
+// @router		/v1/hertz/admin/user/:userID/disable [PUT]
 func DisableUser(_ context.Context, c *app.RequestContext) {
 	var req user.UserReq
 	if err := a.SetReqWithSub(c, &req).Error; err != nil {
@@ -78,7 +78,7 @@ func DisableUser(_ context.Context, c *app.RequestContext) {
 // @Tags		user
 // @Param		userID		path	integer	true	"user id"
 // @Success		200
-// @router		/v1/im/admin/user/:userID [DELETE]
+// @router		/v1/hertz/admin/user/:userID [DELETE]
 func DeleteUser(_ context.Context, c *app.RequestContext) {
 	var req user.UserReq
 	if err := a.SetReqWithSub(c, &req).Error; err != nil {

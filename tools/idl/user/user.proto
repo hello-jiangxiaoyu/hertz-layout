@@ -30,15 +30,15 @@ message CreateUserReq {
 
 service UserService {
   rpc GetUser(CommonGetReq) returns(CommonResp) {
-    option (api.get) = "/v1/im/admin/user"; // 获取用户列表
+    option (api.get) = "/v1/hertz/admin/user"; // 获取用户列表
   }
   rpc CreateUser(CreateUserReq) returns(CommonResp) {
-    option (api.post) = "/v1/im/admin/user"; // 创建用户
+    option (api.post) = "/v1/hertz/admin/user"; // 创建用户
   }
   rpc DisableUser(UserReq) returns(CommonResp) {
-    option (api.put) = "/v1/im/admin/user/:userID/disable"; // 禁用用户
+    option (api.put) = "/v1/hertz/admin/user/:userID/disable"; // 禁用用户
   }
   rpc DeleteUser(UserReq) returns(CommonResp) { // 删除用户
-    option (api.delete) = "/v1/im/admin/user/:userID";
+    option (api.delete) = "/v1/hertz/admin/user/:userID";
   }
 }
