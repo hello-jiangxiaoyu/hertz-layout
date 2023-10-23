@@ -7,10 +7,12 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"hertz/demo/biz/dal/log"
 )
 
 // Ping .
 func Ping(_ context.Context, c *app.RequestContext) {
+	log.Info().Msg("Ping ok")
 	c.JSON(consts.StatusOK, utils.H{
 		"message": "pong",
 	})

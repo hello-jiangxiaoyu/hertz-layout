@@ -2,6 +2,7 @@ package log
 
 import (
 	"github.com/rs/zerolog"
+	"time"
 )
 
 var (
@@ -18,5 +19,10 @@ func Init() error {
 		return err
 	}
 
+	Info().Msg("new zero log ok")
 	return nil
+}
+
+func Info() *zerolog.Event {
+	return Zero.Info().Str("ts", time.Now().Format("2006-01-02T15:04:05.000"))
 }

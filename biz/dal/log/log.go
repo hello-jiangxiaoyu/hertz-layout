@@ -27,11 +27,12 @@ func NewZeroErrorLog() (*zerolog.Logger, error) {
 	}
 
 	consoleWriter := zerolog.ConsoleWriter{
-		Out:        writer,
-		NoColor:    true,
-		TimeFormat: "2006-01-02 15:04:05.000",
+		Out:     writer,
+		NoColor: true,
+		FormatTimestamp: func(i interface{}) string {
+			return ""
+		},
 	}
-	logger := log.Output(consoleWriter).With().Timestamp().Caller().Logger()
-	logger.Info().Msg("new error log ok")
+	logger := log.Output(consoleWriter).With().Caller().Logger()
 	return &logger, nil
 }
