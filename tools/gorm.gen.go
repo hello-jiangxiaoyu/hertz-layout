@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gen"
 	"gorm.io/gorm"
-	"hertz/demo/internal/utils"
+	"hertz/demo/pkg/utils"
 )
 
 func main() {

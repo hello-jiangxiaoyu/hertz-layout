@@ -4,7 +4,7 @@ package conf
 import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"gopkg.in/yaml.v3"
-	"hertz/demo/internal/utils"
+	"hertz/demo/pkg/utils"
 	"os"
 	"sync"
 )
@@ -66,27 +66,4 @@ func initConf() {
 	}
 
 	hlog.Info("conf init ok: ", utils.StructToString(conf))
-}
-
-// LogLevel 日志打印级别
-func LogLevel() hlog.Level {
-	level := GetConf().Hertz.LogLevel
-	switch level {
-	case "trace":
-		return hlog.LevelTrace
-	case "debug":
-		return hlog.LevelDebug
-	case "info":
-		return hlog.LevelInfo
-	case "notice":
-		return hlog.LevelNotice
-	case "warn":
-		return hlog.LevelWarn
-	case "error":
-		return hlog.LevelError
-	case "fatal":
-		return hlog.LevelFatal
-	default:
-		return hlog.LevelInfo
-	}
 }

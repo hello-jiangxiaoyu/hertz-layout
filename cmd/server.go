@@ -9,8 +9,8 @@ import (
 	"hertz/demo/biz/handler"
 	"hertz/demo/biz/middleware"
 	"hertz/demo/biz/router"
-	"hertz/demo/internal/conf"
-	_ "hertz/demo/internal/docs"
+	"hertz/demo/pkg/conf"
+	_ "hertz/demo/pkg/docs"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"

@@ -7,7 +7,7 @@ import (
 	"github.com/hertz-contrib/swagger"
 	swaggerFiles "github.com/swaggo/files"
 	"hertz/demo/biz/handler"
-	_ "hertz/demo/internal/docs"
+	_ "hertz/demo/pkg/docs"
 )
 
 // customizeRegister registers customize routers.

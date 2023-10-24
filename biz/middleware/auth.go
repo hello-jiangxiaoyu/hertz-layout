@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/golang-jwt/jwt/v5"
-	"hertz/demo/internal/conf"
-	"hertz/demo/internal/response"
-	"hertz/demo/internal/utils"
+	"hertz/demo/pkg/conf"
+	"hertz/demo/pkg/response"
+	"hertz/demo/pkg/utils"
 	"strconv"
 )
 

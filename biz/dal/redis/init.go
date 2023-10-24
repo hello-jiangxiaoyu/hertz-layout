@@ -2,7 +2,7 @@ package redis
 
 import (
 	"context"
-	"hertz/demo/internal/conf"
+	"hertz/demo/pkg/conf"
 
 	"github.com/redis/go-redis/v9"
 )

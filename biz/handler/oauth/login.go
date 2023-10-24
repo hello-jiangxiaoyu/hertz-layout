@@ -11,9 +11,9 @@ import (
 	"hertz/demo/biz/dal/mysql"
 	"hertz/demo/biz/handler/internal"
 	"hertz/demo/biz/model/hertz/oauth"
-	"hertz/demo/internal/conf"
-	"hertz/demo/internal/response"
-	"hertz/demo/internal/utils"
+	"hertz/demo/pkg/conf"
+	"hertz/demo/pkg/response"
+	"hertz/demo/pkg/utils"
 	"strconv"
 	"time"
 )

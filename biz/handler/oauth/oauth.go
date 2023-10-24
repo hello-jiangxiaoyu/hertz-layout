@@ -6,8 +6,8 @@ import (
 	"context"
 	"github.com/golang-jwt/jwt/v5"
 	"hertz/demo/biz/model/hertz/oauth"
-	"hertz/demo/internal/response"
-	"hertz/demo/internal/utils"
+	"hertz/demo/pkg/response"
+	"hertz/demo/pkg/utils"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"

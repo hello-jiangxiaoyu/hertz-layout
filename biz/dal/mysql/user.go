@@ -3,7 +3,7 @@ package mysql
 import (
 	"github.com/pkg/errors"
 	"hertz/demo/biz/model/mysql"
-	"hertz/demo/internal/utils"
+	"hertz/demo/pkg/utils"
 )
 
 func GetUserList(cursor, num int64) ([]mysql.User, error) {

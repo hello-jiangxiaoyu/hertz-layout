@@ -3,7 +3,7 @@ package mysql
 import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"hertz/demo/internal/conf"
+	"hertz/demo/pkg/conf"
 )
 
 var (

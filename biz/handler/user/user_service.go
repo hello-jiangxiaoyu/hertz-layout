@@ -6,7 +6,7 @@ import (
 	"context"
 	"hertz/demo/biz/dal/mysql"
 	"hertz/demo/biz/handler/internal"
-	"hertz/demo/internal/response"
+	"hertz/demo/pkg/response"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	user "hertz/demo/biz/model/hertz/user"
