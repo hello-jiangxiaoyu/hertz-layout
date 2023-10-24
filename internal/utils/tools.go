@@ -1,13 +1,13 @@
 package utils
 
 import (
-	"fmt"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 )
 
-// DeferErr handle defer function err
-func DeferErr(errFunc func() error) {
+// LogFuncErr handle function err
+func LogFuncErr(errFunc func() error) {
 	if err := errFunc(); err != nil {
-		fmt.Println("### Defer err: ", err)
+		hlog.Error("### Defer err: ", err)
 	}
 }
 

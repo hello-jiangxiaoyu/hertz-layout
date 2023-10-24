@@ -19,11 +19,12 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/gzip"
 	"github.com/hertz-contrib/swagger"
+	"github.com/spf13/cobra"
 	swaggerFiles "github.com/swaggo/files"
 )
 
 // StartServer 数据面服务接口
-func StartServer() {
+func StartServer(_ *cobra.Command, _ []string) {
 	var err error
 	for i := 0; i < 3; i++ {
 		if err = dal.Init(); err == nil {
@@ -41,6 +42,7 @@ func StartServer() {
 	hz.Spin()
 }
 
+// 初始化hertz服务
 func getServer() *server.Hertz {
 	opts := []config.Option{
 		server.WithHostPorts(conf.GetConf().Hertz.Address),                 // 监听端口
@@ -48,12 +50,12 @@ func getServer() *server.Hertz {
 	}
 	h := server.New(opts...)
 	h.Use(middleware.MyRecoveryHandler)       // panic处理
-	h.Use(gzip.Gzip(gzip.DefaultCompression)) //响应压缩
-	h.Use(middleware.AccessLog)
+	h.Use(middleware.AccessLog)               // 请求日志
+	h.Use(gzip.Gzip(gzip.DefaultCompression)) // 响应压缩
 	h.NoRoute(func(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, "no such router")
 	})
-	router.GeneratedRegister(h)
+	router.GeneratedRegister(h) // 服务接口
 	customizedRegister(h)
 	return h
 }

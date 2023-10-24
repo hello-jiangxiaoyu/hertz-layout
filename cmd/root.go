@@ -9,15 +9,11 @@ import (
 var (
 	rootCmd = &cobra.Command{
 		Use: "server",
-		Run: func(cmd *cobra.Command, args []string) {
-			StartServer()
-		},
+		Run: StartServer,
 	}
 	adminCmd = &cobra.Command{
 		Use: "admin",
-		Run: func(cmd *cobra.Command, args []string) {
-			StartAdminServer()
-		},
+		Run: StartAdminServer,
 	}
 )
 
