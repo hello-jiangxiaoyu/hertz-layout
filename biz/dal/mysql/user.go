@@ -57,3 +57,11 @@ func GetUserByName(username string) (mysql.User, error) {
 	}
 	return user, nil
 }
+
+func GetUserBySub(sub int64) (mysql.User, error) {
+	var user mysql.User
+	if err := DB.Where("id = ?", sub).First(&user).Error; err != nil {
+		return user, err
+	}
+	return user, nil
+}

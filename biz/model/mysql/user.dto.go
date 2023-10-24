@@ -3,7 +3,7 @@ package mysql
 import "time"
 
 type UserDto struct {
-	ID          string     `json:"id"`
+	ID          int64      `json:"id"`
 	DisplayName string     `json:"displayName"`
 	Gender      string     `json:"gender"`
 	Birthdate   *time.Time `json:"birthdate"`

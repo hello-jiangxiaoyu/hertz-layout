@@ -26,14 +26,6 @@ func StructToString(obj any) string {
 	return string(res)
 }
 
-// DefaultValIfEmpty 为空就返回默认值
-func DefaultValIfEmpty(val, def string) string {
-	if val == "" {
-		return def
-	}
-	return val
-}
-
 // ToUpperCase 字母转大写
 func ToUpperCase(c byte) byte {
 	if 'a' <= c && c <= 'z' {

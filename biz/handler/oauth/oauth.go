@@ -4,9 +4,11 @@ package oauth
 
 import (
 	"context"
+	"github.com/golang-jwt/jwt/v5"
 	"hertz/demo/biz/model/hertz/oauth"
 	"hertz/demo/internal/response"
 	"hertz/demo/internal/utils"
+	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -25,10 +27,21 @@ func GetToken(_ context.Context, c *app.RequestContext) {
 		response.ErrorRequest(c, err)
 		return
 	}
+	// todo: validate client
 
-	resp := new(oauth.CommonResp)
+	now := time.Now()
+	accessToken, err := utils.SigneTokenString(jwt.RegisteredClaims{
+		Issuer:    "hertz-layout",                                          // token签发者
+		Subject:   req.ClientID,                                            // 用户id
+		ExpiresAt: jwt.NewNumericDate(now.Add(ExpireSecond * time.Second)), // 过期时间
+		NotBefore: jwt.NewNumericDate(now.Add(time.Second * -10)),          // 生效时间
+	})
+	if err != nil {
+		response.ErrorUnknown(c, err, "signe token string err")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, map[string]any{"access_token": accessToken})
 }
 
 // GetJWKs .

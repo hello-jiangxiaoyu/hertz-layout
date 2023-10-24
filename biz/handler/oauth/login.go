@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	ExpireSecond = 3600 * 24 * 7
+	ExpireSecond = 3600 * 24 * 7 // 7天
 )
 
 var a internal.Api
@@ -39,7 +39,7 @@ func LoginPassword(_ context.Context, c *app.RequestContext) {
 	}
 	user, err := mysql.GetUserByName(req.Username)
 	if err != nil {
-		response.ErrorRequest(c, err)
+		response.ErrorSelect(c, err, "no such user")
 		return
 	}
 	if !utils.CheckPasswordHash(req.Password, user.Password) {
@@ -48,7 +48,7 @@ func LoginPassword(_ context.Context, c *app.RequestContext) {
 	}
 
 	now := time.Now()
-	tokenString, err := utils.SigneTokenString(jwt.RegisteredClaims{
+	idToken, err := utils.SigneTokenString(jwt.RegisteredClaims{
 		Issuer:    "hertz-layout",                                          // token签发者
 		Subject:   strconv.FormatInt(user.ID, 10),                          // 用户id
 		ExpiresAt: jwt.NewNumericDate(now.Add(ExpireSecond * time.Second)), // 过期时间
@@ -59,7 +59,7 @@ func LoginPassword(_ context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.SetCookie(conf.DefaultCookieKey, tokenString, ExpireSecond, "/", string(c.Host()), protocol.CookieSameSiteNoneMode, false, true)
+	c.SetCookie(conf.DefaultCookieKey, idToken, ExpireSecond, "/v1/hertz", string(c.Host()), protocol.CookieSameSiteNoneMode, false, true)
 
 	response.Success(c)
 }
@@ -94,9 +94,13 @@ func GetProfile(_ context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(oauth.CommonResp)
+	user, err := mysql.GetUserBySub(*a.Sub)
+	if err != nil {
+		response.ErrorSelect(c, err, "no such user")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	response.SuccessWithData(c, user)
 }
 
 // UpdateProfile .
@@ -112,9 +116,7 @@ func UpdateProfile(_ context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(oauth.CommonResp)
-
-	c.JSON(consts.StatusOK, resp)
+	response.Success(c)
 }
 
 // Logout .
@@ -129,7 +131,7 @@ func Logout(_ context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(oauth.CommonResp)
+	c.SetCookie(conf.DefaultCookieKey, "", -1, "/v1/hertz", string(c.Host()), protocol.CookieSameSiteNoneMode, false, true)
 
-	c.JSON(consts.StatusOK, resp)
+	response.Success(c)
 }
