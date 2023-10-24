@@ -42,10 +42,10 @@ func AuthHandler(_ context.Context, c *app.RequestContext) {
 		response.ErrorUnknown(c, err, "get sub err")
 		return
 	}
-	intSub, err := strconv.ParseInt(sub, 10, 64)
+	int64Sub, err := strconv.ParseInt(sub, 10, 64)
 	if err != nil {
 		response.ErrorUnknown(c, err, "sub to integer err")
 		return
 	}
-	c.Set("sub", intSub)
+	c.Set("sub", int64Sub)
 }

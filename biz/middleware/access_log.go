@@ -8,22 +8,39 @@ import (
 	"time"
 )
 
+const (
+	LabelTime         = "ts"
+	LabelStatus       = "status"
+	LabelMethod       = "method"
+	LabelPath         = "path"
+	LabelFullPath     = "full_path"
+	LabelHost         = "host"
+	LabelClientIP     = "client_ip"
+	LabelLatency      = "latency"
+	LabelByteReceived = "byte_received"
+	LabelByteSent     = "byte_sent"
+	LabelProto        = "proto"
+	LabelRef          = "ref"
+	LabelUA           = "ua"
+	LabelErr          = "err"
+)
+
 func AccessLog(ctx context.Context, c *app.RequestContext) {
 	start := time.Now()
 	c.Next(ctx)
 	log.Access.Info().
-		Str("ts", time.Now().Format("2006-01-02T15:04:05.000")).
-		Int("status", c.Response.StatusCode()).
-		Str("method", string(c.Method())).
-		Str("path", string(c.Path())).
-		Str("full_path", c.FullPath()).
-		Str("host", string(c.Host())).
-		Str("client_ip", c.ClientIP()).
-		Int64("latency", start.Sub(time.Now()).Milliseconds()).
-		Int("byte_received", len(c.Request.Body())).
-		Int("byte_sent", len(c.Response.Body())).
-		Str("proto", string(c.Request.URI().Scheme())).
-		Str("ref", c.Request.Header.Get(consts.HeaderReferer)).
-		Str("ua", c.Request.Header.Get(consts.HeaderUserAgent)).
-		Str("err", c.Errors.String()).Msg("")
+		Str(LabelTime, time.Now().Format("2006-01-02T15:04:05.000")).
+		Int(LabelStatus, c.Response.StatusCode()).
+		Str(LabelMethod, string(c.Method())).
+		Str(LabelPath, string(c.Path())).
+		Str(LabelFullPath, c.FullPath()).
+		Str(LabelHost, string(c.Host())).
+		Str(LabelClientIP, c.ClientIP()).
+		Int64(LabelLatency, time.Now().Sub(start).Milliseconds()).
+		Int(LabelByteReceived, len(c.Request.Body())).
+		Int(LabelByteSent, len(c.Response.Body())).
+		Str(LabelProto, string(c.Request.URI().Scheme())).
+		Str(LabelRef, c.Request.Header.Get(consts.HeaderReferer)).
+		Str(LabelUA, c.Request.Header.Get(consts.HeaderUserAgent)).
+		Str(LabelErr, c.Errors.String()).Msg("")
 }

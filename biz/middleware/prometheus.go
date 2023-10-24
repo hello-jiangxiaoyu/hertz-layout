@@ -9,18 +9,9 @@ import (
 	prom "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"hertz/demo/internal/utils"
 	"net/http"
 	"strconv"
 	"time"
-)
-
-const (
-	labelMethod     = "method"
-	labelStatusCode = "statusCode"
-	labelPath       = "path"
-
-	unknownLabelValue = "unknown"
 )
 
 type serverTracer struct {
@@ -70,18 +61,26 @@ func histogramObserve(histogramVec *prom.HistogramVec, value time.Duration, labe
 }
 
 // genLabels make labels values.
-func genLabels(ctx *app.RequestContext) prom.Labels {
+func genLabels(c *app.RequestContext) prom.Labels {
 	labels := make(prom.Labels)
-	labels[labelMethod] = utils.DefaultValIfEmpty(string(ctx.Request.Method()), unknownLabelValue)
-	labels[labelStatusCode] = utils.DefaultValIfEmpty(strconv.Itoa(ctx.Response.Header.StatusCode()), unknownLabelValue)
-	labels[labelPath] = utils.DefaultValIfEmpty(string(ctx.Request.Path()), unknownLabelValue)
-
+	labels[LabelMethod] = string(c.Request.Method())
+	labels[LabelStatus] = strconv.Itoa(c.Response.Header.StatusCode())
+	labels[LabelPath] = string(c.Request.Path())
+	//labels[LabelFullPath] = c.FullPath()
+	//labels[LabelHost] = string(c.Host())
+	//labels[LabelClientIP] = c.ClientIP()
+	//labels[LabelByteReceived] = strconv.Itoa(len(c.Request.Body()))
+	//labels[LabelByteSent] = strconv.Itoa(len(c.Response.Body()))
+	//labels[LabelProto] = string(c.Request.URI().Scheme())
+	//labels[LabelRef] = c.Request.Header.Get(consts.HeaderReferer)
+	//labels[LabelUA] = c.Request.Header.Get(consts.HeaderUserAgent)
+	//labels[LabelErr] = c.Errors.String()
 	return labels
 }
 
 func PrometheusHandler(addr, path string) tracer.Tracer {
 	registry := prom.NewRegistry()
-	enableGoCollector := false
+	const enableGoCollector = false
 	http.Handle(path, promhttp.HandlerFor(registry, promhttp.HandlerOpts{ErrorHandling: promhttp.ContinueOnError}))
 	go func() {
 		if err := http.ListenAndServe(addr, nil); err != nil {
@@ -94,7 +93,7 @@ func PrometheusHandler(addr, path string) tracer.Tracer {
 			Name: "hertz_server_throughput",
 			Help: "Total number of HTTPs completed by the server, regardless of success or failure.",
 		},
-		[]string{labelMethod, labelStatusCode, labelPath},
+		[]string{LabelMethod, LabelStatus, LabelPath},
 	)
 	registry.MustRegister(serverHandledCounter)
 	serverHandledHistogram := prom.NewHistogramVec(
@@ -103,7 +102,7 @@ func PrometheusHandler(addr, path string) tracer.Tracer {
 			Help:    "Latency (microseconds) of HTTP that had been application-level handled by the server.",
 			Buckets: []float64{5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000},
 		},
-		[]string{labelMethod, labelStatusCode, labelPath},
+		[]string{LabelMethod, LabelStatus, LabelPath},
 	)
 	registry.MustRegister(serverHandledHistogram)
 	if enableGoCollector {
