@@ -4,7 +4,6 @@ package oauth
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
-	"hertz/demo/biz/middleware"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -53,7 +52,8 @@ func _auth20Mw() []app.HandlerFunc {
 }
 
 func _logoutMw() []app.HandlerFunc {
-	return []app.HandlerFunc{middleware.AuthHandler}
+	// your code...
+	return nil
 }
 
 func _loginMw() []app.HandlerFunc {
@@ -72,7 +72,8 @@ func _loginproviderMw() []app.HandlerFunc {
 }
 
 func _meMw() []app.HandlerFunc {
-	return []app.HandlerFunc{middleware.AuthHandler}
+	// your code...
+	return nil
 }
 
 func _getprofileMw() []app.HandlerFunc {

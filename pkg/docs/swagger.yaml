@@ -157,6 +157,14 @@ paths:
           description: OK
       tags:
       - login
+  /v1/hertz/ws:
+    get:
+      description: websocket api
+      responses:
+        "200":
+          description: OK
+      tags:
+      - ws
 schemes:
 - http
 swagger: "2.0"

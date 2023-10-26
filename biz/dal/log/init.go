@@ -30,3 +30,7 @@ func Info() *zerolog.Event {
 func Warn() *zerolog.Event {
 	return Zero.Warn().Str("ts", time.Now().Format("2006-01-02T15:04:05.000"))
 }
+
+func Error() *zerolog.Event {
+	return Zero.Error().Str("ts", time.Now().Format("2006-01-02T15:04:05.000"))
+}

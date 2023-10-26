@@ -9,11 +9,12 @@ hz new -module hertz-layout -I idl -idl idl
 ```bash
 hz update -I idl -idl tools/idl/user.proto
 hz update -I idl -idl tools/idl/oauth.proto
+hz update -I idl -idl tools/idl/ws.proto
 ```
 
 生成文档
 ```bash
-swag init -o internal/docs
+swag init -o pkg/docs
 ```
 
 

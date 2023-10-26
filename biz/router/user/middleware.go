@@ -4,11 +4,11 @@ package user
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
-	"hertz/demo/biz/middleware"
 )
 
 func rootMw() []app.HandlerFunc {
-	return []app.HandlerFunc{middleware.AuthHandler}
+	// your code...
+	return nil
 }
 
 func _v1Mw() []app.HandlerFunc {

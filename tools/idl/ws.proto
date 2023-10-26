@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ws;
+
+// biz/model
+option go_package = "hertz/ws";
+
+import "api.proto";
+
+message NoReq {}
+service Websocket {
+  rpc ChatRoom(NoReq) returns(NoReq) {
+    option (api.get) = "/v1/hertz/ws"; // web socket
+  }
+}

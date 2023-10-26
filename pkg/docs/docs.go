@@ -226,6 +226,19 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/hertz/ws": {
+            "get": {
+                "description": "websocket api",
+                "tags": [
+                    "ws"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {
