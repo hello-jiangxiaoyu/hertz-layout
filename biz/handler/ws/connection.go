@@ -9,6 +9,7 @@ import (
 
 var (
 	ErrorUserNotExist = errors.New("user not exist")
+	sender            WebSocketConnection
 )
 
 type WebSocketConnection struct {
@@ -59,7 +60,7 @@ func (c *WebSocketConnection) SendUserMessage(senderID int64, userID int64, room
 		return err
 	}
 	if err = conn.WriteMessage(websocket.TextMessage, byteData); err != nil {
-		return err
+		return errors.WithMessage(err, "conn.WriteMessage err")
 	}
 	return nil
 }
