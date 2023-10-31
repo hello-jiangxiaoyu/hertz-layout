@@ -5,17 +5,15 @@ import (
 	"github.com/hertz-contrib/websocket"
 	"github.com/pkg/errors"
 	"hertz/demo/biz/dal/log"
+	"hertz/demo/biz/handler/ws/internal"
 	"time"
 )
 
 // WebsocketHandler websocket客户端连接处理
 func WebsocketHandler(sub int64) websocket.HertzHandler {
 	return func(conn *websocket.Conn) {
-		initConnection(conn)
-		sender.Connection.Set(sub, conn) // 用户上线
-
+		initConnection(sub, conn)
 		ticker := time.NewTicker(pingPeriod)
-		// go MessageWriter(ticker, conn)
 		defer func() {
 			ticker.Stop()
 			sender.Connection.Delete(sub) // 用户下线
@@ -34,11 +32,11 @@ func WebsocketHandler(sub int64) websocket.HertzHandler {
 
 			switch mt {
 			case websocket.PingMessage:
-				if err = conn.WriteMessage(websocket.PongMessage, nil); err != nil {
+				if err = internal.PongResponse(conn); err != nil {
 					log.Error().Msg("conn.WriteMessage pong err" + err.Error())
 				}
 			case websocket.TextMessage:
-				if err = HandleTextMessage(sub, message); err != nil {
+				if err = HandleTextMessage(conn, sub, message); err != nil {
 					log.Error().Msg("handle text message err" + err.Error())
 				}
 			case websocket.PongMessage:
@@ -49,28 +47,29 @@ func WebsocketHandler(sub int64) websocket.HertzHandler {
 }
 
 // HandleTextMessage json业务类型消息处理
-func HandleTextMessage(sub int64, message []byte) error {
+func HandleTextMessage(conn *websocket.Conn, sub int64, message []byte) error {
 	var msg Message
 	if err := sonic.Unmarshal(message, &msg); err != nil {
-		return errors.WithMessage(err, "unmarshal text message err")
+		return internal.ErrorUnknown(conn, err, "unmarshal text message err")
 	}
 
 	switch msg.Type {
 	case MsgTypeUser:
 		if err := sender.SendUserMessage(sub, msg.ReceiveID, 0, &msg); err != nil {
-			return errors.WithMessage(err, "send user message err")
+			return internal.ErrorUnknown(conn, err, "send user message err")
 		}
 	case MsgTypeRoom:
 		if err := sender.SendRoomMessage(sub, msg.ReceiveID, &msg); err != nil {
 			return errors.WithMessage(err, "send room message err")
 		}
 	default:
-		return errors.New("msg type unknown")
+		return internal.ErrorMsg(conn, "text msg type unknown")
 	}
-	return nil
+
+	return internal.SuccessResponse(conn)
 }
 
-func initConnection(conn *websocket.Conn) {
+func initConnection(sub int64, conn *websocket.Conn) {
 	const (
 		maxMessageSize = 1024             // Maximum message size allowed from peer.
 		writeWait      = 10 * time.Second // Time allowed to write a message to the peer.
@@ -79,4 +78,5 @@ func initConnection(conn *websocket.Conn) {
 	_ = conn.SetReadDeadline(time.Now().Add(pongWait))
 	_ = conn.SetWriteDeadline(time.Now().Add(writeWait))
 	conn.SetPongHandler(func(string) error { return conn.SetReadDeadline(time.Now().Add(pongWait)) })
+	sender.Connection.Set(sub, conn)
 }

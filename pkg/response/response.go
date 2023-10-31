@@ -8,16 +8,16 @@ import (
 // Response 结构体类型响应
 type Response struct {
 	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-	Data any    `json:"data"`
+	Msg  string `json:"msg,omitempty"`
+	Data any    `json:"data,omitempty"`
 }
 
 // ArrayResponse 数组类型响应
 type ArrayResponse struct {
 	Code  int    `json:"code"`
-	Msg   string `json:"msg"`
-	Total int    `json:"total"`
-	Data  any    `json:"data"`
+	Msg   string `json:"msg,omitempty"`
+	Total int    `json:"total,omitempty"`
+	Data  any    `json:"data,omitempty"`
 }
 
 // 构造响应
