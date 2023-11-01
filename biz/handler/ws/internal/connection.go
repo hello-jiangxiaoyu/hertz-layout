@@ -1,4 +1,4 @@
-package ws
+package internal
 
 import (
 	"github.com/bytedance/sonic"
@@ -9,7 +9,7 @@ import (
 
 var (
 	ErrorUserNotExist = errors.New("user not exist")
-	sender            WebSocketConnection
+	Sender            WebSocketConnection
 )
 
 type WebSocketConnection struct {
@@ -19,7 +19,7 @@ type WebSocketConnection struct {
 
 type Message struct {
 	ReceiveID int64
-	Type      string
+	Path      string
 	Content   string
 }
 
@@ -52,7 +52,7 @@ func (c *WebSocketConnection) SendUserMessage(senderID int64, userID int64, room
 	msgSend := MessageSend{
 		SenderID: senderID,
 		RoomID:   roomID,
-		Type:     msg.Type,
+		Type:     msg.Path,
 		Content:  msg.Content,
 	}
 	byteData, err := sonic.Marshal(&msgSend)

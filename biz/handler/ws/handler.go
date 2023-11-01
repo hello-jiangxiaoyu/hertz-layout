@@ -16,7 +16,7 @@ func WebsocketHandler(sub int64) websocket.HertzHandler {
 		ticker := time.NewTicker(pingPeriod)
 		defer func() {
 			ticker.Stop()
-			sender.Connection.Delete(sub) // 用户下线
+			internal.Sender.Connection.Delete(sub) // 用户下线
 			if err := conn.Close(); err != nil {
 				log.Error().Msgf("close websocket conn err: %s", err.Error())
 			}
@@ -48,18 +48,18 @@ func WebsocketHandler(sub int64) websocket.HertzHandler {
 
 // HandleTextMessage json业务类型消息处理
 func HandleTextMessage(conn *websocket.Conn, sub int64, message []byte) error {
-	var msg Message
+	var msg internal.Message
 	if err := sonic.Unmarshal(message, &msg); err != nil {
 		return internal.ErrorUnknown(conn, err, "unmarshal text message err")
 	}
 
-	switch msg.Type {
+	switch msg.Path {
 	case MsgTypeUser:
-		if err := sender.SendUserMessage(sub, msg.ReceiveID, 0, &msg); err != nil {
+		if err := internal.Sender.SendUserMessage(sub, msg.ReceiveID, 0, &msg); err != nil {
 			return internal.ErrorUnknown(conn, err, "send user message err")
 		}
 	case MsgTypeRoom:
-		if err := sender.SendRoomMessage(sub, msg.ReceiveID, &msg); err != nil {
+		if err := internal.Sender.SendRoomMessage(sub, msg.ReceiveID, &msg); err != nil {
 			return errors.WithMessage(err, "send room message err")
 		}
 	default:
@@ -78,5 +78,5 @@ func initConnection(sub int64, conn *websocket.Conn) {
 	_ = conn.SetReadDeadline(time.Now().Add(pongWait))
 	_ = conn.SetWriteDeadline(time.Now().Add(writeWait))
 	conn.SetPongHandler(func(string) error { return conn.SetReadDeadline(time.Now().Add(pongWait)) })
-	sender.Connection.Set(sub, conn)
+	internal.Sender.Connection.Set(sub, conn)
 }
