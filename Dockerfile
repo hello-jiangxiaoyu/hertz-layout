@@ -21,7 +21,7 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=builder /app/server ./
-COPY --from=builder /app/internal/conf/conf.online.yaml ./internal/conf/conf.online.yaml
+COPY --from=builder /app/pkg/conf/conf.online.yaml ./pkg/conf/conf.online.yaml
 
 EXPOSE 8888
 ENTRYPOINT ./server

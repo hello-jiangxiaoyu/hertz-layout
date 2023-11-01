@@ -4,7 +4,7 @@ import "os"
 
 const (
 	DefaultCookieKey  = "hertz-layout"
-	DefaultConfigPath = "internal/conf/conf.online.yaml"
+	DefaultConfigPath = "pkg/conf/conf.online.yaml"
 )
 
 func getEnv(env, defaultValue string) string {
