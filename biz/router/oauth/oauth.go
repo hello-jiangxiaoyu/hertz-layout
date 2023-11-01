@@ -27,20 +27,14 @@ func Register(r *server.Hertz) {
 			}
 			{
 				_auth2 := _hertz.Group("/auth2", _auth2Mw()...)
+				_auth2.POST("/logout", append(_logoutMw(), oauth.Logout)...)
 				_auth2.POST("/token", append(_gettokenMw(), oauth.GetToken)...)
-			}
-		}
-		{
-			_im := _v1.Group("/im", _imMw()...)
-			{
-				_auth20 := _im.Group("/auth2", _auth20Mw()...)
-				_auth20.POST("/logout", append(_logoutMw(), oauth.Logout)...)
-				_auth20.POST("/login", append(_loginpasswordMw(), oauth.LoginPassword)...)
-				_login := _auth20.Group("/login", _loginMw()...)
+				_auth2.POST("/login", append(_loginpasswordMw(), oauth.LoginPassword)...)
+				_login := _auth2.Group("/login", _loginMw()...)
 				_login.POST("/:type", append(_loginproviderMw(), oauth.LoginProvider)...)
 			}
 			{
-				_me := _im.Group("/me", _meMw()...)
+				_me := _hertz.Group("/me", _meMw()...)
 				_me.GET("/profile", append(_getprofileMw(), oauth.GetProfile)...)
 				_me.PUT("/profile", append(_updateprofileMw(), oauth.UpdateProfile)...)
 			}

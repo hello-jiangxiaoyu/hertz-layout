@@ -35,19 +35,19 @@ message User {
 
 service Login {
   rpc LoginPassword(LoginReq) returns(CommonResp) {
-    option (api.post) = "/v1/im/auth2/login"; // 账号密码登录
+    option (api.post) = "/v1/hertz/auth2/login"; // 账号密码登录
   }
   rpc LoginProvider(TypeReq) returns(CommonResp) {
-    option (api.post) = "/v1/im/auth2/login/:type"; // 第三方登录
+    option (api.post) = "/v1/hertz/auth2/login/:type"; // 第三方登录
   }
   rpc GetProfile(NoReq) returns(CommonResp) {
-    option (api.get) = "/v1/im/me/profile"; // 个人信息
+    option (api.get) = "/v1/hertz/me/profile"; // 个人信息
   }
   rpc UpdateProfile(User) returns(CommonResp) {
-    option (api.put) = "/v1/im/me/profile"; // 修改个人信息
+    option (api.put) = "/v1/hertz/me/profile"; // 修改个人信息
   }
   rpc Logout(NoReq) returns(CommonResp) {
-    option (api.post) = "/v1/im/auth2/logout"; // 登出
+    option (api.post) = "/v1/hertz/auth2/logout"; // 登出
   }
 }
 

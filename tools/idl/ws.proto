@@ -8,7 +8,7 @@ option go_package = "hertz/ws";
 import "api.proto";
 
 message NoReq {}
-service Websocket {
+service Api {
   rpc ChatRoom(NoReq) returns(NoReq) {
     option (api.get) = "/v1/hertz/ws"; // web socket
   }
