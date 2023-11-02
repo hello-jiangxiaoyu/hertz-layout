@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	ErrorUserNotExist = errors.New("user not exist")
 	Sender            WebSocketConnection
+	ErrorUserNotExist = errors.New("user not exist")
 )
 
 type WebSocketConnection struct {
@@ -28,19 +28,6 @@ type MessageSend struct {
 	RoomID   int64
 	Type     string
 	Content  string
-}
-
-func (c *WebSocketConnection) SendRoomMessage(senderID int64, roomID int64, msg *Message) error {
-	userIDs := c.RoomUserID.Get(roomID)
-	if userIDs == nil {
-		return errors.New("room not exist")
-	}
-	for _, userID := range *userIDs {
-		if err := c.SendUserMessage(senderID, userID, roomID, msg); err != nil && !errors.Is(err, ErrorUserNotExist) {
-			return err
-		}
-	}
-	return nil
 }
 
 func (c *WebSocketConnection) SendUserMessage(senderID int64, userID int64, roomID int64, msg *Message) error {

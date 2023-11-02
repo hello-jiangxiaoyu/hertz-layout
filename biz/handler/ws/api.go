@@ -8,15 +8,6 @@ import (
 	"github.com/hertz-contrib/websocket"
 	"hertz/demo/biz/handler/internal"
 	"hertz/demo/pkg/response"
-	"time"
-)
-
-const (
-	pongWait   = 60 * time.Second    // Time allowed to read the next pong message from the peer.
-	pingPeriod = (pongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
-
-	MsgTypeUser = "user" // 好友消息
-	MsgTypeRoom = "room" //	群消息
 )
 
 var (
@@ -41,7 +32,7 @@ func ChatRoom(_ context.Context, c *app.RequestContext) {
 		return
 	}
 
-	if err := upgrader.Upgrade(c, WebsocketHandler(*a.Sub)); err != nil {
+	if err := upgrader.Upgrade(c, eg.WebsocketHandler(*a.Sub)); err != nil {
 		response.ErrorUnknown(c, err, "websocket upgrade err")
 		return
 	}
